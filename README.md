@@ -36,6 +36,24 @@ day26-mcp/
 > Bước 01–03 dùng **MCP Python SDK v2** (`mcp>=2.0`, xem `requirements.txt`).
 > Lab 04 có môi trường riêng (`uv sync` trong từng thư mục).
 
+## Cấu hình và bằng chứng Lab Day 26
+
+Dùng **một file `.env` ở thư mục gốc**, sao chép từ [`.env.example`](.env.example) rồi điền key Gemini và WeatherAPI. Model của bài là `gemini-3.5-flash-lite`. `.env` được Git bỏ qua; các môi trường `.venv` chỉ chứa dependency.
+
+Sau khi kích hoạt `.venv` gốc, tại `01-function-calling` có thể nạp cấu hình chung bằng `uv run --active --no-project --env-file ../.env python weather_function_calling.py`. Lệnh chạy server và ADK với file cấu hình chung có trong [README Lab 04](04-lab/README.md).
+
+| Bước | Ảnh kết quả chạy thật |
+|---|---|
+| 1. Function Calling | [01-function-calling.png](screenshots/01-function-calling.png) |
+| 2. MCP client qua stdio | [02-mcp-client.png](screenshots/02-mcp-client.png) |
+| 3a. Token đúng | [03a-auth-ok.png](screenshots/03a-auth-ok.png) |
+| 3a. Token sai bị từ chối | [03a-auth-fail.png](screenshots/03a-auth-fail.png) |
+| 3b. Tool Registry | [03b-registry.png](screenshots/03b-registry.png) |
+| 3c. Versioning | [03c-versioning.png](screenshots/03c-versioning.png) |
+| 4–5. Kiểm tra cấu hình | [04-verify-setup.png](screenshots/04-verify-setup.png) |
+| 5. Thời tiết hiện tại từ WeatherAPI | [04-adk-current.png](screenshots/04-adk-current.png) |
+| 5. Dự báo 3 ngày từ WeatherAPI | [04-adk-forecast.png](screenshots/04-adk-forecast.png) |
+
 ## Quick start
 
 ```bash

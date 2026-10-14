@@ -11,15 +11,15 @@ def check_environment():
     """Check if .env file exists and is configured"""
     print("🔍 Checking environment configuration...")
     
-    env_file = Path(".env")
+    env_file = Path(__file__).resolve().parents[2] / ".env"
     if not env_file.exists():
         print("❌ .env file not found")
-        print("   Run: echo 'GOOGLE_API_KEY=your_key' > .env")
+        print(f"   Configure GOOGLE_API_KEY in {env_file}")
         return False
     
     # Check if GOOGLE_API_KEY is set
     from dotenv import load_dotenv
-    load_dotenv()
+    load_dotenv(env_file)
     
     api_key = os.getenv("GOOGLE_API_KEY")
     if not api_key or api_key == "your_google_api_key_here":
@@ -27,7 +27,7 @@ def check_environment():
         print("   Get key from: https://aistudio.google.com/apikey")
         return False
     
-    print(f"✅ GOOGLE_API_KEY configured ({api_key[:10]}...)")
+    print("✅ GOOGLE_API_KEY configured")
     return True
 
 def check_dependencies():
@@ -84,7 +84,7 @@ def check_mcp_server():
 
     # Cùng URL mà weather_agent/agent.py dùng (biến môi trường MCP_SERVER_URL)
     from dotenv import load_dotenv
-    load_dotenv()
+    load_dotenv(Path(__file__).resolve().parents[2] / ".env")
     server_url = os.getenv("MCP_SERVER_URL", "http://localhost:8085/mcp")
 
     try:
@@ -101,7 +101,7 @@ def check_mcp_server():
 
     except Exception as e:
         print(f"❌ Cannot reach MCP server at {server_url}: {e}")
-        print("   Start it: cd ../mcp-server && uv run python weather.py")
+        print("   Start it: cd ../mcp-server && uv run --env-file ../../.env python weather.py")
         return False
 
 def check_agent_import():
@@ -140,7 +140,7 @@ def main():
     if all(checks):
         print("✅ All checks passed!")
         print("\n🚀 Ready to start!")
-        print("   Run: uv run adk web")
+        print("   Run: uv run --env-file ../../.env adk web")
         print("\n📍 Then open: http://localhost:8000")
         return 0
     else:

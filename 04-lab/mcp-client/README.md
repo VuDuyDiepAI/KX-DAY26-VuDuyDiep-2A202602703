@@ -40,8 +40,8 @@ AI agent built with **Google Agent Development Kit (ADK)** that uses tools from 
 
 ```bash
 cd ../mcp-server
-export WEATHERAPI_KEY="your_weatherapi_key"
-uv run python weather.py
+# Configure WEATHERAPI_KEY in the shared ../../.env
+uv run --env-file ../../.env python weather.py
 ```
 
 ### 2. Setup Environment
@@ -49,9 +49,8 @@ uv run python weather.py
 ```bash
 cd mcp-client
 
-# Create .env file with your Google API key
+# Configure GOOGLE_API_KEY in the shared ../../.env at the repository root
 # Get free key from: https://aistudio.google.com/apikey
-echo "GOOGLE_API_KEY=your_google_api_key_here" > .env
 ```
 
 ### 3. Install Dependencies
@@ -63,7 +62,8 @@ uv sync
 ### 4. Run the Agent
 
 ```bash
-uv run adk web
+uv run --env-file ../../.env python verify_setup.py
+uv run --env-file ../../.env adk web
 ```
 
 ### 5. Use the Agent
@@ -83,7 +83,6 @@ mcp-client/
 │   ├── agent.py           # Main agent with MCP connection
 │   └── __init__.py
 ├── pyproject.toml
-├── .env                   # Environment variables (create this)
 └── README.md
 ```
 
@@ -103,7 +102,7 @@ connection_params = StreamableHTTPConnectionParams(
 
 root_agent = Agent(
     name="weather_agent",
-    model="gemini-2.5-flash",
+    model="gemini-3.5-flash-lite",
     tools=[weather_tools],
 )
 ```
@@ -130,9 +129,12 @@ Fix the connection and restart ADK web.
 
 ## Environment Variables
 
-Create `.env` file:
+Use the single `.env` file at the repository root (copy `.env.example` there):
 ```bash
 GOOGLE_API_KEY=your_gemini_api_key
+WEATHERAPI_KEY=your_weatherapi_key
+MCP_SERVER_URL=http://localhost:8085/mcp
+PORT=8085
 ```
 
 ## Resources

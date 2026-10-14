@@ -33,7 +33,7 @@ ADK (Agent Development Kit) đóng vai trò **MCP Client**
 │     → nhận về: get_current_weather, get_forecast, health_check  │
 │                                                                 │
 │  3. TRUYỀN tools cho LLM (Gemini)                               │
-│     Agent(model="gemini-3.5-flash-lite", tools=[weather_tools]) │
+│     Agent(model="gemini-2.5-flash", tools=[weather_tools])      │
 │     → Gemini biết nó có thể gọi 3 tools trên                    │
 │                                                                 │
 │  4. ĐIỀU PHỐI vòng lặp Function Calling                         │
@@ -56,10 +56,11 @@ So với bài 02 (viết client thủ công bằng `mcp.ClientSession`), ADK gi�
 cd mcp-server
 uv sync
 
-# Configure WEATHERAPI_KEY in the shared ../../.env (https://weatherapi.com)
+# Set your WeatherAPI key (get one free at https://weatherapi.com)
+export WEATHERAPI_KEY="your_weatherapi_key"
 
 # Start the server (runs on port 8085 by default)
-uv run --env-file ../../.env python weather.py
+uv run python weather.py
 ```
 
 The server will be available at `http://localhost:8085/mcp`.
@@ -70,11 +71,11 @@ The server will be available at `http://localhost:8085/mcp`.
 cd mcp-client
 uv sync
 
-# Configure GOOGLE_API_KEY in the shared ../../.env
-uv run --env-file ../../.env python verify_setup.py
+# Create .env file with your Gemini API key
+echo "GOOGLE_API_KEY=your_gemini_api_key" > .env
 
 # Start ADK web interface
-uv run --env-file ../../.env adk web
+uv run adk web
 ```
 
 Open http://localhost:8000 in your browser, select `weather_agent`, and ask about the weather.
@@ -83,7 +84,7 @@ Open http://localhost:8000 in your browser, select `weather_agent`, and ask abou
 
 | Variable | Where | Description |
 |----------|-------|-------------|
-| `WEATHERAPI_KEY` | root `.env` | API key from weatherapi.com |
-| `GOOGLE_API_KEY` | root `.env` | Gemini API key |
-| `PORT` | root `.env` | Override server port (default: 8085) |
-| `MCP_SERVER_URL` | root `.env` | MCP endpoint the agent connects to (default: `http://localhost:8085/mcp`; set to your Cloud Run URL + `/mcp` when deployed) |
+| `WEATHERAPI_KEY` | mcp-server | API key from weatherapi.com |
+| `GOOGLE_API_KEY` | mcp-client/.env | Gemini API key |
+| `PORT` | mcp-server (env) | Override server port (default: 8085) |
+| `MCP_SERVER_URL` | mcp-client/.env | MCP endpoint the agent connects to (default: `http://localhost:8085/mcp`; set to your Cloud Run URL + `/mcp` when deployed) |
